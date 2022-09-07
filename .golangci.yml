@@ -1,0 +1,30 @@
+# .golangci.yml
+run:
+  tests: false
+  timeout: 5m
+  skip-dirs:
+    - cmd
+    - doc
+
+  skip-files:
+    - go.mod
+    - go.sum
+
+  skip-dirs-use-default: true
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+
+linters:
+  enable-all: true
+  disable:
+    - wsl
+    - lll
+    - gochecknoglobals
+#    - gocyclo
+    - prealloc
+    - godox
+    - misspell
+    - gocognit
+    - interfacer
