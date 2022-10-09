@@ -55,7 +55,13 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		for _, f := range fields.Items {
+
+		newFields, err := b.ListAllFields(ctx, *SRCAppToken, tableID)
+		if err != nil {
+			panic(err)
+		}
+		defualtFieldID := newFields.Items[0].(*lark.Field).FieldID
+		for i, f := range fields.Items {
 			field := f.(*lark.Field)
 			property := ""
 			if field.Property != nil {
@@ -68,6 +74,13 @@ func main() {
 				fieldType == int64(driver.FieldTypeReferenceLookup) ||
 				fieldType == int64(driver.FieldTypeTwoWayAssociation) {
 				fieldType = int64(driver.FieldTypeText)
+			}
+			if i == 0 {
+				_, err := b.UpdateField(ctx, *DSTAppToken, tableID, defualtFieldID, field.FieldName, fieldType, property)
+				if err != nil {
+					fmt.Println(err)
+				}
+				continue
 			}
 			_, err := b.AddField(ctx, *DSTAppToken, tableID, field.FieldName, fieldType, property)
 			if err != nil {
