@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/luw2007/bitable-mysql-driver/driver"
 	"github.com/luw2007/bitable-mysql-driver/internal/lark"
@@ -27,7 +28,7 @@ func main() {
 		flag.CommandLine.Usage()
 		return
 	}
-	b := lark.NewLarkClient(appID, appSecret, domain, "trace")
+	b := lark.NewLarkClient(appID, appSecret, domain, "trace", 10*time.Second)
 	ctx := context.Background()
 
 	tables := map[string]string{}

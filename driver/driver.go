@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/pingcap/parser"
 	"github.com/sirupsen/logrus"
@@ -26,7 +27,7 @@ func init() {
 func (driver *Driver) Open(name string) (driver.Conn, error) {
 	u, err := url.Parse(name)
 	if err != nil {
-		return nil, fmt.Errorf("parse dns error: %w", err)
+		return nil, fmt.Errorf("parse dsn error: %w", err)
 	}
 	if u.Scheme != BitableSchema {
 		return nil, fmt.Errorf("[bitable driver]  unsupported scheme %s", u.Scheme)
@@ -42,17 +43,26 @@ func (driver *Driver) Open(name string) (driver.Conn, error) {
 		return nil, errors.New("[bitable driver]  needed username and password")
 	}
 	logLevel := "info"
-	if l := u.Query().Get("log_level"); l != "" {
+	querys := u.Query()
+	if l := querys.Get("log_level"); l != "" {
 		logLevel = l
 	}
-	if debug := u.Query().Get("debug"); debug != "" {
+	if debug := querys.Get("debug"); debug != "" {
 		logLevel = "trace"
+	}
+	timeoutStr := querys.Get("timeout")
+	if timeoutStr == "" {
+		timeoutStr = "5s"
+	}
+	ts, err := time.ParseDuration(timeoutStr)
+	if err != nil {
+		return nil, fmt.Errorf("parse timeout err, timeout:%s, %w", timeoutStr, err)
 	}
 
 	logrus.Debugf("[bitable driver]  log level %v", logLevel)
 
 	conn := &Conn{
-		BiTable:   lark.NewLarkClient(appID, appSecret, domain, logLevel),
+		BiTable:   lark.NewLarkClient(appID, appSecret, domain, logLevel, ts),
 		AppID:     appID,
 		AppSecret: appSecret,
 		parser:    parser.New(),
