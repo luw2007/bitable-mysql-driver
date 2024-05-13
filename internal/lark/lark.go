@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
+	"time"
 
 	"github.com/chyroc/lark"
 	"github.com/jinzhu/copier"
@@ -30,13 +31,15 @@ func getStoreSlot(appID string) lark.Store {
 	return s.(lark.Store)
 }
 
-func NewLarkClient(appID, appSecret, apiDomain, logLevel string) *BiTable {
+func NewLarkClient(appID, appSecret, apiDomain, logLevel string, timeout time.Duration) *BiTable {
 	logger := &larkLogger{logger: logrus.StandardLogger()}
 	return &BiTable{
 		Lark: lark.New(lark.WithAppCredential(appID, appSecret),
 			lark.WithStore(getStoreSlot(appID)),
 			lark.WithLogger(logger, getLarkLogLevel(logLevel)),
-			lark.WithOpenBaseURL(apiDomain)),
+			lark.WithOpenBaseURL(apiDomain),
+			lark.WithTimeout(timeout),
+		),
 		appID: appID,
 	}
 }
