@@ -7,7 +7,7 @@ require (
 	github.com/chyroc/lark v0.0.97
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/test v0.0.0-20210722231415-061457976a23 // indirect
-	github.com/jinzhu/copier v0.3.4
+	github.com/jinzhu/copier v0.4.0
 	github.com/pingcap/parser v0.0.0-20200623164729-3a18f1e5dceb
 	github.com/sirupsen/logrus v1.7.0
 	github.com/stretchr/testify v1.8.0
