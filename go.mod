@@ -10,7 +10,7 @@ require (
 	github.com/jinzhu/copier v0.3.4
 	github.com/pingcap/parser v0.0.0-20200623164729-3a18f1e5dceb
 	github.com/sirupsen/logrus v1.7.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.12.0
 	golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b // indirect
 	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
