@@ -28,7 +28,7 @@ func main() {
 		flag.CommandLine.Usage()
 		return
 	}
-	b := lark.NewLarkClient(appID, appSecret, domain, "trace", 10*time.Second)
+	b := lark.NewLarkClient(appID, appSecret, domain, "info", 10*time.Second)
 	ctx := context.Background()
 
 	tables := map[string]string{}

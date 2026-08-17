@@ -41,7 +41,7 @@ var (
 	appToken   = os.Getenv("APP_TOKEN")
 	testTable1 = os.Getenv("TABLE_1") + "5"
 
-	dsn = fmt.Sprintf("bitable://%s:%s@open.feishu.cn/%s?log_level=trace", appID, appSecret, appToken)
+	dsn = fmt.Sprintf("bitable://%s:%s@open.feishu.cn/%s", appID, appSecret, appToken)
 )
 
 func main() {

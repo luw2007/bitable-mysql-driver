@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	// 例子：https://www.feishu.cn/base/bascnQIrLs6MrhIvftGsdYJgRFd
+	// BOE integration resources are supplied through environment variables.
 	appID       = os.Getenv("APP_ID")
 	appSecret   = os.Getenv("APP_SECRET")
 	appToken    = os.Getenv("APP_TOKEN")
@@ -22,7 +22,7 @@ var (
 	testTable2  = os.Getenv("TABLE_2")
 	testUser1   = os.Getenv("USER_1")
 	testRecord1 = os.Getenv("RECORD_1")
-	testDSN     = fmt.Sprintf("bitable://%s:%s@open.feishu.cn/%s?log_level=trace", appID, appSecret, appToken)
+	testDSN     = fmt.Sprintf("bitable://%s:%s@open.feishu.cn/%s", appID, appSecret, appToken)
 )
 
 func TestMain(m *testing.M) {

@@ -22,7 +22,7 @@ var (
 func main() {
 	flag.Parse()
 	domain := "https://open.feishu.cn"
-	s := lark.NewSheetsClient(appID, appSecret, domain, "trace")
+	s := lark.NewSheetsClient(appID, appSecret, domain, "info")
 	sheets, err := s.GetAPP(context.Background(), *sheetTokenFlag)
 	if err != nil {
 		panic(err)

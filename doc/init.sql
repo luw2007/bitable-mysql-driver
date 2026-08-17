@@ -1,5 +1,5 @@
-# bitable://cli_a14eda43cb7ad013:l5zyi***********************16Y0@open.feishu.cn/bascnQIrLs6MrhIvftGsdYJgRFd?log_level=trace
-use bascnQIrLs6MrhIvftGsdYJgRFd;
+# bitable://<app_id>:<app_secret>@open.feishu.cn/<app_token>
+use <app_token>;
 
 # table1 tblHTHTelIVwIeqN
 CREATE TABLE `单向关联`

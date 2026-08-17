@@ -701,7 +701,6 @@ func (stmt *bitableStatement) ExecContext(ctx context.Context, args []driver.Nam
 		}
 	}
 	return res, nil
-	return stmt.Exec(convertNamedValue(args))
 }
 
 func (stmt *bitableStatement) searchRecords(ctx context.Context, appToken, table, view, filter string, fields map[string]interface{}, limit int64, callback func(context.Context, map[string]map[string]interface{}) (int, error)) (driver.Rows, error) {

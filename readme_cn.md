@@ -7,7 +7,7 @@
 ## 快速上手
 
 ```bash
-go run cmd/bsql/main.go 'bitable://cli_a14eda43cb7ad013:l5zyi***********************16Y0@open.feishu.cn/bascnQIrLs6MrhIvftGsdYJgRFd'
+go run cmd/bsql/main.go 'bitable://<app_id>:<app_secret>@open.feishu.cn/<app_token>'
 > show tables;
 id: tblZAuXVNjvK3PE6
 name: 测试读取-请勿修改

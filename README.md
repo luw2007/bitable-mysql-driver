@@ -7,8 +7,10 @@ Feishu open platform provides bi-table api. Changed the sdk as a mysql driver fo
 ## quick start
 
 ```
-# dsn = "bitable://<app_id>:<app_secret>@open.feishu.cn/<app_token>?log_level=trace"
-go run cmd/bsql/main.go 'bitable://cli_a14eda43cb7ad013:l5zyi***********************16Y0@open.feishu.cn/bascnQIrLs6MrhIvftGsdYJgRFd'
+# dsn = "bitable://<app_id>:<app_secret>@open.feishu.cn/<app_token>"
+go run cmd/bsql/main.go 'bitable://<app_id>:<app_secret>@open.feishu.cn/<app_token>'
+
+The driver does not emit verbose Feishu SDK request or response bodies because they can contain credentials and access tokens. Use application-level debug logs for SQL diagnostics.
 
 > show tables;
 id: tblTqyMTqUTFrDQc
