@@ -9,7 +9,7 @@ require (
 	github.com/chzyer/test v0.0.0-20210722231415-061457976a23 // indirect
 	github.com/jinzhu/copier v0.3.4
 	github.com/pingcap/parser v0.0.0-20200623164729-3a18f1e5dceb
-	github.com/sirupsen/logrus v1.7.0
+	github.com/sirupsen/logrus v1.8.3
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/text v0.3.8 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
