@@ -37,7 +37,17 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+func requireIntegration(t *testing.T) {
+	t.Helper()
+	if appID == "" || appSecret == "" || appToken == "" || testTable1 == "" || testTable2 == "" || testUser1 == "" || testRecord1 == "" {
+		t.Skip("BOE integration credentials are not configured")
+	}
+}
+
 func cleanTable(table string) {
+	if appID == "" || appSecret == "" || appToken == "" || table == "" {
+		return
+	}
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		logrus.Fatalf("some error %s", err.Error())
@@ -54,6 +64,7 @@ func cleanTable(table string) {
 }
 
 func TestShow(t *testing.T) {
+	requireIntegration(t)
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		t.Errorf("some error %s", err.Error())
@@ -107,6 +118,7 @@ func TestShow(t *testing.T) {
 }
 
 func TestRecord(t *testing.T) {
+	requireIntegration(t)
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		t.Errorf("some error %s", err.Error())
@@ -202,6 +214,7 @@ func TestRecord(t *testing.T) {
 }
 
 func TestAlter(t *testing.T) {
+	requireIntegration(t)
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		t.Errorf("some error %s", err.Error())
@@ -228,6 +241,7 @@ func TestAlter(t *testing.T) {
 }
 
 func TestTable(t *testing.T) {
+	requireIntegration(t)
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		t.Errorf("some error %s", err.Error())
@@ -249,6 +263,7 @@ func TestTable(t *testing.T) {
 }
 
 func TestView(t *testing.T) {
+	requireIntegration(t)
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		t.Errorf("some error %s", err.Error())
@@ -290,6 +305,7 @@ func TestView(t *testing.T) {
 }
 
 func TestModify(t *testing.T) {
+	requireIntegration(t)
 	db, err := sql.Open("bitable", testDSN)
 	if err != nil {
 		t.Errorf("some error %s", err.Error())

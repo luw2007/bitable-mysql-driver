@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -49,7 +50,10 @@ func (stmt *bitableStatement) QueryContext(ctx context.Context, args []driver.Na
 	}
 	stmt.stmt = stmtNodes
 	stmt.ctx = ctx
-	stmt.args = buildNamedArgs(stmt.query, args)
+	stmt.args, err = bindNamedArgs(stmtNodes, args)
+	if err != nil {
+		return nil, fmt.Errorf("[bitable driver] bind parameters: %w", err)
+	}
 	logrus.Debug("[bitable driver]  do query")
 	baseRows := &rows{
 		ctx:      stmt.ctx,
@@ -85,17 +89,36 @@ func (stmt *bitableStatement) QueryContext(ctx context.Context, args []driver.Na
 	}
 }
 
-func buildNamedArgs(query string, args []driver.NamedValue) map[int]driver.NamedValue {
-	mask := '?'
-	want := make(map[int]driver.NamedValue, len(args))
-	index := 0
-	for i, v := range query {
-		if v == mask {
-			want[i] = args[index]
-			index++
-		}
+type paramMarkerVisitor struct {
+	offsets []int
+}
+
+func (v *paramMarkerVisitor) Enter(node ast.Node) (ast.Node, bool) {
+	if marker, ok := node.(*test_driver.ParamMarkerExpr); ok {
+		v.offsets = append(v.offsets, marker.Offset)
 	}
-	return want
+	return node, false
+}
+
+func (*paramMarkerVisitor) Leave(node ast.Node) (ast.Node, bool) {
+	return node, true
+}
+
+func bindNamedArgs(statements []ast.StmtNode, args []driver.NamedValue) (map[int]driver.NamedValue, error) {
+	visitor := new(paramMarkerVisitor)
+	for _, statement := range statements {
+		statement.Accept(visitor)
+	}
+	sort.Ints(visitor.offsets)
+	if len(args) != len(visitor.offsets) {
+		return nil, fmt.Errorf("expected %d arguments, got %d", len(visitor.offsets), len(args))
+	}
+
+	bound := make(map[int]driver.NamedValue, len(args))
+	for index, offset := range visitor.offsets {
+		bound[offset] = args[index]
+	}
+	return bound, nil
 }
 
 func convertNamedValue(args []driver.NamedValue) []driver.Value {
@@ -104,6 +127,14 @@ func convertNamedValue(args []driver.NamedValue) []driver.Value {
 		values = append(values, arg.Value)
 	}
 	return values
+}
+
+func quoteFilterString(value string) string {
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	_ = encoder.Encode(value)
+	return strings.TrimSuffix(buffer.String(), "\n")
 }
 
 // Query  implement for Query
@@ -853,9 +884,9 @@ func (stmt *bitableStatement) buildFilter(ctx context.Context, node interface{})
 		// 数字和字符串处理方式不相同
 		switch root.Kind() {
 		case test_driver.KindString:
-			return fmt.Sprintf(`"%s"`, root.GetString()), nil
+			return quoteFilterString(root.GetString()), nil
 		case test_driver.KindBytes:
-			return fmt.Sprintf(`"%s"`, string(root.GetBytes())), nil
+			return quoteFilterString(string(root.GetBytes())), nil
 		case test_driver.KindNull:
 			return "", ErrNullValue
 		default:
@@ -904,7 +935,7 @@ func (stmt *bitableStatement) buildFilter(ctx context.Context, node interface{})
 				if ok {
 					switch s := v.Value.(type) {
 					case string:
-						return fmt.Sprintf(`"%s"`, s), nil
+						return quoteFilterString(s), nil
 					default:
 						return fmt.Sprint(s), nil
 					}
