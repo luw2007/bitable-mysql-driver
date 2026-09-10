@@ -10,7 +10,7 @@ require (
 	github.com/jinzhu/copier v0.3.4
 	github.com/pingcap/parser v0.0.0-20200623164729-3a18f1e5dceb
 	github.com/sirupsen/logrus v1.8.3
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.12.1
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.30.0
