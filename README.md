@@ -1,5 +1,7 @@
 # bitable-mysql-driver
 
+> **No longer maintained.** For Feishu Bitable operations, use `lark-cli` instead. It already provides a capable direct interface, and modern AI models can work with it without this third-party SQL/MySQL driver. This repository remains available for existing users, but no further fixes, dependency updates, or security patches are planned. Do not use it for new projects.
+
 Feishu open platform provides bi-table api. Changed the sdk as a mysql driver for quick start.
 
 [简体中文 README](./readme_cn.md)
